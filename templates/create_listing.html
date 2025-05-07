@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Listing - Cure24{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <div class="card bg-dark">
+            <div class="card-header bg-info text-white">
+                <h2 class="mb-0">Create Healthcare Assistant Listing</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('create_listing') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {% if form.name.errors %}
+                            {{ form.name(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.name(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.assistance_type.label(class="form-label") }}
+                        {% if form.assistance_type.errors %}
+                            {{ form.assistance_type(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.assistance_type.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.assistance_type(class="form-select") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {% if form.description.errors %}
+                            {{ form.description(class="form-control is-invalid", rows=5) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.description(class="form-control", rows=5) }}
+                        {% endif %}
+                        <small class="text-muted">Describe your experience, qualifications, and services you provide.</small>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.hourly_rate.label(class="form-label") }}
+                            {% if form.hourly_rate.errors %}
+                                {{ form.hourly_rate(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.hourly_rate.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.hourly_rate(class="form-control") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.location.label(class="form-label") }}
+                            {% if form.location.errors %}
+                                {{ form.location(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.location.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.location(class="form-control") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            {{ form.is_premium(class="form-check-input") }}
+                            {{ form.is_premium.label(class="form-check-label") }}
+                            <small class="d-block text-muted mt-1">Premium listings appear at the top of search results and get more visibility.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+    {{ form.premium_duration.label }}
+    {{ form.premium_duration(class="form-control") }}
+</div>
+
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-info btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-5">
+        <div class="card premium-preview listing-card mb-4">
+            <div class="card-header bg-dark">
+                <h3 class="mb-0">Listing Preview</h3>
+            </div>
+            <div class="card-body">
+                <span class="premium-badge" style="display:none">Premium</span>
+                <h4 id="preview-name">Your Name</h4>
+                <p class="mb-1"><i class="fas fa-tag me-2 healthcare-icon"></i><span id="preview-type">Registered Nurse</span></p>
+                <p class="mb-1"><i class="fas fa-map-marker-alt me-2 healthcare-icon"></i><span id="preview-location">City</span></p>
+                <p class="mb-3"><i class="fas fa-euro-sign me-2 healthcare-icon"></i><span id="preview-rate">25.00</span> per hour</p>
+                <p id="preview-description" class="mb-0">Your listing description will appear here...</p>
+            </div>
+        </div>
+        
+        <div class="card bg-dark h-100">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0">Premium Benefits</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush bg-dark">
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-warning me-2"></i>
+                        <strong>Top Placement</strong>: Appear at the top of search results
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-warning me-2"></i>
+                        <strong>Visual Highlight</strong>: Stand out with premium badge and styling
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-warning me-2"></i>
+                        <strong>More Visibility</strong>: Get up to 5x more views
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-warning me-2"></i>
+                        <strong>Higher Engagement</strong>: Increased chances of being contacted
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update preview as user types
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameField = document.getElementById('name');
+        const typeField = document.getElementById('assistance_type');
+        const descField = document.getElementById('description');
+        const rateField = document.getElementById('hourly_rate');
+        const locField = document.getElementById('location');
+        const premiumBox = document.getElementById('is_premium');
+        
+        const previewName = document.getElementById('preview-name');
+        const previewType = document.getElementById('preview-type');
+        const previewDesc = document.getElementById('preview-description');
+        const previewRate = document.getElementById('preview-rate');
+        const previewLoc = document.getElementById('preview-location');
+        const previewCard = document.querySelector('.premium-preview');
+        const premiumBadge = document.querySelector('.premium-badge');
+        
+        if (nameField) nameField.addEventListener('input', function() {
+            previewName.textContent = this.value || 'Your Name';
+        });
+        
+        if (typeField) typeField.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            previewType.textContent = selectedOption.text || 'Registered Nurse';
+        });
+        
+        if (descField) descField.addEventListener('input', function() {
+            previewDesc.textContent = this.value || 'Your listing description will appear here...';
+        });
+        
+        if (rateField) rateField.addEventListener('input', function() {
+            previewRate.textContent = this.value ? parseFloat(this.value).toFixed(2) : '25.00';
+        });
+        
+        if (locField) locField.addEventListener('input', function() {
+            previewLoc.textContent = this.value || 'City';
+        });
+        
+        if (premiumBox) premiumBox.addEventListener('change', function() {
+            if (this.checked) {
+                previewCard.classList.add('premium-listing');
+                premiumBadge.style.display = 'block';
+            } else {
+                previewCard.classList.remove('premium-listing');
+                premiumBadge.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Premium Payment - Cure24{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card bg-dark mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h2 class="mb-0">Premium Listing Payment</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h3 class="text-warning">Listing Details</h3>
+                        <p class="mb-1"><strong>Name:</strong> {{ listing.name }}</p>
+                        <p class="mb-1"><strong>Type:</strong> {{ listing.assistance_type|title }}</p>
+                        <p class="mb-1"><strong>Location:</strong> {{ listing.location }}</p>
+                        <p class="mb-3"><strong>Premium Duration:</strong> {{ listing.premium_duration }} days</p>
+                        <h4>Amount Due: €{{ "%.2f"|format(amount) }}</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 premium-listing">
+                            <div class="card-body text-center">
+                                <h5>Premium Benefits</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check-circle text-warning me-2"></i> Top placement</li>
+                                    <li><i class="fas fa-check-circle text-warning me-2"></i> Premium badge</li>
+                                    <li><i class="fas fa-check-circle text-warning me-2"></i> Increased visibility</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for Stripe integration -->
+                <div class="alert alert-info">
+                    <h4>Stripe Integration Coming Soon</h4>
+                    <p>In the completed application, this is where the credit card payment form would appear.</p>
+                    <p>For now, we'll simulate the payment process.</p>
+                </div>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.listing_id }}
+                    {{ form.premium_duration }}
+                    {{ form.amount }}
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-warning btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card bg-dark">
+            <div class="card-header">
+                <h3 class="mb-0">Future Stripe Implementation Notes</h3>
+            </div>
+            <div class="card-body">
+                <p>To implement Stripe payments in the future, you'll need to:</p>
+                <ol>
+                    <li>Create a Stripe account and get your API keys</li>
+                    <li>Install the Stripe Python library</li>
+                    <li>Create a payment intent on the server</li>
+                    <li>Use Stripe Elements to collect payment details</li>
+                    <li>Confirm the payment and update the listing's premium status</li>
+                </ol>
+                <p>When integrated, this page will be replaced with a secure Stripe Checkout form.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

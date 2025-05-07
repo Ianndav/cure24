@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Cure24 - Healthcare Assistant Marketplace{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center py-5">
+    <h1 class="display-4 mb-4">Welcome to <span class="text-info">Cure24</span></h1>
+    <p class="lead mb-4">Find qualified healthcare assistants or offer your services on our professional platform</p>
+    
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('register') }}" class="btn btn-info btn-lg">Join Now</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Login</a>
+        {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-info btn-lg">Go to Dashboard</a>
+        {% endif %}
+        <a href="{{ url_for('find_assistants') }}" class="btn btn-outline-info btn-lg">Find Assistants</a>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 bg-dark">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-nurse fa-3x mb-3 text-info"></i>
+                    <h3 class="card-title h4">Qualified Professionals</h3>
+                    <p class="card-text">Connect with certified healthcare assistants, nurses, physiotherapists, and caregivers.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 bg-dark">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marker-alt fa-3x mb-3 text-info"></i>
+                    <h3 class="card-title h4">Local Assistance</h3>
+                    <p class="card-text">Find healthcare professionals in your area who can provide the care you need.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 bg-dark">
+                <div class="card-body text-center">
+                    <i class="fas fa-hand-holding-medical fa-3x mb-3 text-info"></i>
+                    <h3 class="card-title h4">Personalized Care</h3>
+                    <p class="card-text">Choose the perfect caregiver based on your specific healthcare requirements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-5 pt-5 border-top">
+        <h2 class="mb-4">How It Works</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 bg-dark">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">1</span>
+                        </div>
+                        <h4 class="card-title">Create an Account</h4>
+                        <p class="card-text">Sign up for free and create your personal profile.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 bg-dark">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">2</span>
+                        </div>
+                        <h4 class="card-title">List or Search</h4>
+                        <p class="card-text">Post your healthcare services or search for assistance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 bg-dark">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">3</span>
+                        </div>
+                        <h4 class="card-title">Connect</h4>
+                        <p class="card-text">Find the perfect match for your healthcare needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

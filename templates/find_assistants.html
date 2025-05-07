@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Healthcare Assistants - Cure24{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h1 class="mb-3">Find Healthcare Assistants</h1>
+                <p class="lead">Browse through our list of professional healthcare assistants and find the perfect match for your needs.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Search by name, location, or care type..." id="searchInput">
+                            <button class="btn btn-info" type="button" id="searchButton">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="filterType">
+                            <option value="">All Types</option>
+                            <option value="nurse">Registered Nurse</option>
+                            <option value="caregiver">Caregiver</option>
+                            <option value="physiotherapist">Physiotherapist</option>
+                            <option value="babysitter">Babysitter</option>
+                            <option value="elderly_care">Elderly Care</option>
+                            <option value="disability_support">Disability Support</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="listingsContainer">
+    {% if listings %}
+        {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4 listing-item" 
+                 data-type="{{ listing.assistance_type }}" 
+                 data-name="{{ listing.name }}" 
+                 data-location="{{ listing.location }}">
+                <div class="card listing-card h-100 {% if listing.is_premium %}premium-listing{% endif %}">
+                    {% if listing.is_premium %}
+                        <span class="premium-badge">Premium</span>
+                    {% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title">{{ listing.name }}</h4>
+                        <p class="card-text mb-1">
+                            <i class="fas fa-tag me-2 healthcare-icon"></i> {{ listing.assistance_type|title }}
+                        </p>
+                        <p class="card-text mb-1">
+                            <i class="fas fa-map-marker-alt me-2 healthcare-icon"></i> {{ listing.location }}
+                        </p>
+                        <p class="card-text mb-3">
+                            <i class="fas fa-euro-sign me-2 healthcare-icon"></i> {{ "%.2f"|format(listing.hourly_rate) }} per hour
+                        </p>
+                        <p class="card-text description-text">{{ listing.description|truncate(120) }}</p>
+                    </div>
+                    <div class="card-footer bg-dark d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Listed on {{ listing.created_at.strftime('%Y-%m-%d') }}</small>
+                        <button class="btn btn-sm btn-outline-info contact-btn" data-bs-toggle="modal" data-bs-target="#contactModal" data-assistant="{{ listing.name }}">
+                            Contact
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <p class="mb-0">No healthcare assistants are available at the moment. Please check back later.</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div id="noResults" class="alert alert-warning text-center mt-4" style="display: none;">
+    <p class="mb-0">No results found matching your search criteria. Try different keywords or clear the filters.</p>
+</div>
+
+<!-- Contact Modal (simplified for prototype) -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact <span id="assistantName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>In this prototype version, the contact functionality is not yet implemented.</p>
+                <p>In the full version, you will be able to send a message to the healthcare assistant directly through our platform.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Contact modal functionality
+        const contactModal = document.getElementById('contactModal');
+        if (contactModal) {
+            contactModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const assistantName = button.getAttribute('data-assistant');
+                const assistantNameSpan = contactModal.querySelector('#assistantName');
+                assistantNameSpan.textContent = assistantName;
+            });
+        }
+        
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const filterType = document.getElementById('filterType');
+        const listingItems = document.querySelectorAll('.listing-item');
+        const noResults = document.getElementById('noResults');
+        
+        function filterListings() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filterValue = filterType.value;
+            let resultsFound = false;
+            
+            listingItems.forEach(item => {
+                const type = item.getAttribute('data-type');
+                const name = item.getAttribute('data-name').toLowerCase();
+                const location = item.getAttribute('data-location').toLowerCase();
+                
+                const matchesSearch = searchTerm === '' || 
+                    name.includes(searchTerm) || 
+                    location.includes(searchTerm) ||
+                    type.includes(searchTerm);
+                
+                const matchesFilter = filterValue === '' || type === filterValue;
+                
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = '';
+                    resultsFound = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            if (resultsFound) {
+                noResults.style.display = 'none';
+            } else {
+                noResults.style.display = 'block';
+            }
+        }
+        
+        if (searchButton) searchButton.addEventListener('click', filterListings);
+        if (searchInput) searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                filterListings();
+            }
+        });
+        if (filterType) filterType.addEventListener('change', filterListings);
+    });
+</script>
+{% endblock %}

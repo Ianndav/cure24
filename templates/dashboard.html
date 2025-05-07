@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Cure24{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h2 class="mb-4">Welcome, {{ current_user.username }}!</h2>
+                <p class="lead">Manage your healthcare assistant listings or create a new one.</p>
+                <a href="{{ url_for('create_listing') }}" class="btn btn-info">
+                    <i class="fas fa-plus-circle me-2"></i> Create New Listing
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card bg-dark">
+            <div class="card-header bg-secondary">
+                <h3 class="mb-0">Your Listings</h3>
+            </div>
+            <div class="card-body">
+                {% if listings %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Assistance Type</th>
+                                    <th>Location</th>
+                                    <th>Hourly Rate</th>
+                                    <th>Premium</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for listing in listings %}
+                                <tr>
+                                    <td>{{ listing.name }}</td>
+                                    <td>{{ listing.assistance_type|title }}</td>
+                                    <td>{{ listing.location }}</td>
+                                    <td>€{{ "%.2f"|format(listing.hourly_rate) }}</td>
+                                    <td>
+                                        {% if listing.is_premium %}
+                                            <span class="badge bg-warning text-dark">Premium</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Standard</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ listing.created_at.strftime('%Y-%m-%d') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">You haven't created any listings yet. <a href="{{ url_for('create_listing') }}" class="alert-link">Create your first listing</a> to connect with people who need your healthcare services.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card bg-dark h-100">
+            <div class="card-header bg-secondary">
+                <h3 class="mb-0">Tips for Healthcare Providers</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush bg-dark">
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-info me-2"></i>
+                        Keep your profile updated with your latest qualifications
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-info me-2"></i>
+                        Use a professional photo to build trust
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-info me-2"></i>
+                        Be detailed about your services and experience
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-check-circle text-info me-2"></i>
+                        Consider upgrading to a premium listing for more visibility
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-dark h-100">
+            <div class="card-header bg-secondary">
+                <h3 class="mb-0">Benefits of Premium Listings</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush bg-dark">
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Appear at the top of search results
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Stand out with highlighted profile
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Get up to 5x more views than standard listings
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Higher chance of being contacted by potential clients
+                    </li>
+                </ul>
+                <div class="mt-3">
+                    <a href="{{ url_for('create_listing') }}" class="btn btn-warning">
+                        <i class="fas fa-crown me-2"></i> Create Premium Listing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

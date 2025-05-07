@@ -1,0 +1,18 @@
+<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .logo-text { font-family: Arial, sans-serif; font-weight: bold; }
+    .text-primary { fill: #0dcaf0; }
+    .text-secondary { fill: #6c757d; }
+    .icon { fill: #0dcaf0; }
+  </style>
+  
+  <!-- Medical Cross Icon -->
+  <path class="icon" d="M25,10 L35,10 L35,25 L50,25 L50,35 L35,35 L35,50 L25,50 L25,35 L10,35 L10,25 L25,25 Z" />
+  
+  <!-- Logo Text -->
+  <text x="65" y="30" class="logo-text text-primary" font-size="24">Cure</text>
+  <text x="125" y="30" class="logo-text text-secondary" font-size="24">24</text>
+  
+  <!-- Tagline -->
+  <text x="65" y="44" class="text-secondary" font-size="10">Healthcare Assistant Marketplace</text>
+</svg>
