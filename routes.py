@@ -16,7 +16,11 @@ def register():
         return redirect(url_for('routes.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        user = User(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data  # Nota: NON stiamo ancora cifrando la password per semplicità
+        )
         db.session.add(user)
         db.session.commit()
         flash('Registrazione completata! Ora puoi accedere.', 'success')
