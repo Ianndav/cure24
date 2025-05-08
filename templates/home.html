@@ -1,5 +1,11 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h1>Benvenuto su Cure24!</h1>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Cure24</title>
+</head>
+<body>
+    <h1>Benvenuto su Cure24!</h1>
+    <a href="{{ url_for('routes.register') }}">Registrati</a> |
+    <a href="{{ url_for('routes.login') }}">Login</a>
+</body>
+</html>
